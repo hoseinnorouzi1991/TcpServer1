@@ -1,0 +1,6 @@
+C:\Users\Arash\documents\visual studio 2017\Projects\TcpServer1\TcpServer1\bin\Debug\TcpServer1.exe.config
+C:\Users\Arash\documents\visual studio 2017\Projects\TcpServer1\TcpServer1\bin\Debug\TcpServer1.exe
+C:\Users\Arash\documents\visual studio 2017\Projects\TcpServer1\TcpServer1\bin\Debug\TcpServer1.pdb
+C:\Users\Arash\documents\visual studio 2017\Projects\TcpServer1\TcpServer1\obj\Debug\TcpServer1.exe
+C:\Users\Arash\documents\visual studio 2017\Projects\TcpServer1\TcpServer1\obj\Debug\TcpServer1.pdb
+C:\Users\Arash\documents\visual studio 2017\Projects\TcpServer1\TcpServer1\obj\Debug\TcpServer1.csprojResolveAssemblyReference.cache
