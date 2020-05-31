@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -10,41 +11,90 @@ namespace TcpServer1
 {
     class Program
     {
-        private const int portNum = 13;
+        //private const int portNum = 13;
 
-        public static int Main(String[] args)
+        public static void Main(String[] args)
         {
-            bool done = false;
+            #region
+            //bool done = false;
 
-            var listener = new TcpListener(IPAddress.Any, portNum);
+            //var listener = new TcpListener(IPAddress.Any, portNum);
 
-            listener.Start();
+            //listener.Start();
 
-            while (!done)
+            //while (!done)
+            //{
+            //    Console.Write("Waiting for connection...");
+            //    TcpClient client = listener.AcceptTcpClient();
+
+            //    Console.WriteLine("Connection accepted.");
+            //    NetworkStream ns = client.GetStream();
+
+            //    byte[] byteTime = Encoding.ASCII.GetBytes(DateTime.Now.ToString());
+
+            //    try
+            //    {
+            //        ns.Write(byteTime, 0, byteTime.Length);
+            //        ns.Close();
+            //        client.Close();
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Console.WriteLine(e.ToString());
+            //    }
+            //}
+
+            //listener.Stop();
+
+            //return 0;
+            #endregion
+
+            try
             {
-                Console.Write("Waiting for connection...");
-                TcpClient client = listener.AcceptTcpClient();
+                bool status = true;
+                string serverMessage = "";
+                string clientMessage = "";
 
-                Console.WriteLine("Connection accepted.");
-                NetworkStream ns = client.GetStream();
+                TcpListener tcpListener = new TcpListener(IPAddress.Any,8100);
+                tcpListener.Start();
+                Console.WriteLine("Server Started.");
+                Socket socketForClient = tcpListener.AcceptSocket();
+                Console.WriteLine("server Connected.");
+                NetworkStream networkStream = new NetworkStream(socketForClient);
+                StreamWriter streamWriter = new StreamWriter(networkStream);
+                StreamReader streamReader = new StreamReader(networkStream);
 
-                byte[] byteTime = Encoding.ASCII.GetBytes(DateTime.Now.ToString());
-
-                try
+                while(status)
                 {
-                    ns.Write(byteTime, 0, byteTime.Length);
-                    ns.Close();
-                    client.Close();
+                    if(socketForClient.Connected)
+                    {
+                        serverMessage = streamReader.ReadLine();
+                        Console.WriteLine($"Client: {serverMessage}");
+                        if(serverMessage == "bye")
+                        {
+                            status = false;
+                            streamReader.Close();
+                            streamWriter.Close();
+                            networkStream.Close();
+                            return;
+                        }
+                        Console.Write("Server:");
+                        clientMessage = Console.ReadLine();
+                        streamWriter.WriteLine(clientMessage);
+                        streamWriter.Flush();
+                    }
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.ToString());
-                }
+
+                streamReader.Close();
+                networkStream.Close();
+                streamWriter.Close();
+                socketForClient.Close();
+                Console.WriteLine("Exiting...");
             }
-
-            listener.Stop();
-
-            return 0;
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
     }
 }
